@@ -18,7 +18,9 @@ class EvaluateModelResponse:
     is_model_accepted: bool
     difference: float
 
+
 class ModelEvaluation:
+
     def __init__(self, model_eval_config: ModelEvaluationConfig, data_ingestion_artifact: DataIngestionArtifact,
                  model_trainer_artifact: ModelTrainerArtifact):
         try:
@@ -27,7 +29,7 @@ class ModelEvaluation:
             self.model_trainer_artifact = model_trainer_artifact
         except Exception as e:
             raise MyException(e, sys) from e
-    
+
     def get_best_model(self) -> Optional[Proj1Estimator]:
         """
         Method Name :   get_best_model
@@ -38,16 +40,16 @@ class ModelEvaluation:
         """
         try:
             bucket_name = self.model_eval_config.bucket_name
-            model_path = self.model_eval_config.s3_model_key_path
+            model_path=self.model_eval_config.s3_model_key_path
             proj1_estimator = Proj1Estimator(bucket_name=bucket_name,
                                                model_path=model_path)
-            
+
             if proj1_estimator.is_model_present(model_path=model_path):
                 return proj1_estimator
             return None
         except Exception as e:
             raise  MyException(e,sys)
-    
+        
     def _map_gender_column(self, df):
         """Map Gender column to 0 for Female and 1 for Male."""
         logging.info("Mapping 'Gender' column to binary values")
@@ -147,4 +149,4 @@ class ModelEvaluation:
             logging.info(f"Model evaluation artifact: {model_evaluation_artifact}")
             return model_evaluation_artifact
         except Exception as e:
-            raise MyException(e, sys) from e          
+            raise MyException(e, sys) from e
